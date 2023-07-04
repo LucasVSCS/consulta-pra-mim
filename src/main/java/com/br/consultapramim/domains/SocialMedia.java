@@ -2,8 +2,15 @@ package com.br.consultapramim.domains;
 
 import jakarta.persistence.*;
 
-@Entity(name = "social_media")
-public class SocialMedia {
+import java.io.Serial;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "social_media")
+public class SocialMedia implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "car_hunter_id", nullable = false)
     private Long id;

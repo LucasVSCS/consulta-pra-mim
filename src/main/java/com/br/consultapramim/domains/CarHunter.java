@@ -2,8 +2,15 @@ package com.br.consultapramim.domains;
 
 import jakarta.persistence.*;
 
-@Entity(name = "car_hunter")
-public class CarHunter {
+import java.io.Serial;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "car_hunter")
+public class CarHunter  implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "car_hunter_sequence", sequenceName = "sq_car_hunter")
