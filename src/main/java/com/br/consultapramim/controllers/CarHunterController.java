@@ -1,15 +1,15 @@
 package com.br.consultapramim.controllers;
 
 import com.br.consultapramim.domains.dtos.CarHunterDTO;
+import com.br.consultapramim.domains.dtos.PaginationResultResponseDTO;
 import com.br.consultapramim.services.CarHunterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @Validated
@@ -19,8 +19,13 @@ public class CarHunterController {
     private CarHunterService carHunterService;
 
     @GetMapping
-    public ResponseEntity<List<CarHunterDTO>> getCarHunter() {
-        List<CarHunterDTO> carHunterList = carHunterService.getCarHunters();
+    public ResponseEntity<PaginationResultResponseDTO<CarHunterDTO>> getCarHunter(
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(required = false) String name
+    ) {
+        PaginationResultResponseDTO<CarHunterDTO> carHunterList = carHunterService.getAllCarHunters(pageNo, pageSize, sortBy, name);
         return ResponseEntity.ok().body(carHunterList);
     }
 }

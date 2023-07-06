@@ -1,9 +1,8 @@
 package com.br.consultapramim.services;
 
 import com.br.consultapramim.domains.dtos.CarHunterDTO;
-
-import java.util.List;
+import com.br.consultapramim.domains.dtos.PaginationResultResponseDTO;
 
 public interface CarHunterService {
-    List<CarHunterDTO> getCarHunters();
+    PaginationResultResponseDTO<CarHunterDTO> getAllCarHunters(Integer pageNo, Integer pageSize, String sortBy, String name);
 }
