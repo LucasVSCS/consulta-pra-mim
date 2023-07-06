@@ -14,6 +14,11 @@ public class CityServiceImpl implements CityService {
     private CityRepository cityRepository;
 
     @Override
+    public List<City> getCities() {
+        return cityRepository.findAll();
+    }
+
+    @Override
     public List<City> getCitiesByName(String cityName) {
         return cityRepository.findByNameLikeIgnoreCase(cityName);
     }

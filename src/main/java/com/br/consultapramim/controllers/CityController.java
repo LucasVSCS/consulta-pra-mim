@@ -20,6 +20,12 @@ public class CityController {
     @Autowired
     private CityService cityService;
 
+    @GetMapping
+    public ResponseEntity<List<City>> getCities() {
+        List<City> cityList = cityService.getCities();
+        return ResponseEntity.ok().body(cityList);
+    }
+
     @GetMapping("/get-by-name")
     public ResponseEntity<List<City>> getCitiesByName(@RequestParam @NotNull String name) {
         List<City> cityList = cityService.getCitiesByName(name);

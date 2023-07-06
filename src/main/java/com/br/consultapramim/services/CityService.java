@@ -5,5 +5,6 @@ import com.br.consultapramim.domains.City;
 import java.util.List;
 
 public interface CityService {
+    List<City> getCities();
     List<City> getCitiesByName(String cityName);
 }
