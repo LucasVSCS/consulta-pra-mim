@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
-@Table(name="city")
-public class City implements Serializable{
+@Table(name = "city")
+public class City implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -16,30 +17,16 @@ public class City implements Serializable{
     @SequenceGenerator(name = "city_sequence", sequenceName = "sq_city", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Long id;
-
     @Column(name = "name", nullable = false)
     private String name;
-
     @Column(name = "ibge_code", nullable = false)
     private String ibgeCode;
-
     @Column(name = "uf_code", nullable = false)
     private String ufCode;
-
     @Column(name = "slug", nullable = false)
     private String slug;
-
-    public City(Long id, String name, String ibgeCode, String ufCode, String slug) {
-        this.id = id;
-        this.name = name;
-        this.ibgeCode = ibgeCode;
-        this.ufCode = ufCode;
-        this.slug = slug;
-    }
-
-    public City() {
-
-    }
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CarHunter> carHunterList;
 
     public Long getId() {
         return id;
@@ -79,5 +66,13 @@ public class City implements Serializable{
 
     public void setSlug(String slug) {
         this.slug = slug;
+    }
+
+    public List<CarHunter> getCarHunterList() {
+        return carHunterList;
+    }
+
+    public void setCarHunterList(List<CarHunter> carHunterList) {
+        this.carHunterList = carHunterList;
     }
 }

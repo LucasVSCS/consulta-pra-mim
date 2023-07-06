@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "car_hunter")
-public class CarHunter  implements Serializable {
+public class CarHunter implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -16,38 +17,29 @@ public class CarHunter  implements Serializable {
     @SequenceGenerator(name = "car_hunter_sequence", sequenceName = "sq_car_hunter")
     @Column(name = "id", nullable = false)
     private Long id;
-
     @Column(name = "name", nullable = false)
     private String name;
-
     @Column(name = "trading_name", nullable = false)
     private String tradingName;
-
-    @Column(name = "email", nullable = true)
+    @Column(name = "email")
     private String email;
-
-    @Column(name = "logo_url", nullable = true)
+    @Column(name = "logo_url")
     private String logoUrl;
-
-    @Column(name = "service_description", nullable = true)
+    @Column(name = "service_description")
     private String serviceDescription;
-
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
-
-    public CarHunter(Long id, String name, String tradingName, String email, String logoUrl, String serviceDescription, Boolean isActive) {
-        this.id = id;
-        this.name = name;
-        this.tradingName = tradingName;
-        this.email = email;
-        this.logoUrl = logoUrl;
-        this.serviceDescription = serviceDescription;
-        this.isActive = isActive;
-    }
-
-    public CarHunter() {
-
-    }
+    @Column(name = "external_id")
+    private String externalId;
+    @OneToOne(mappedBy = "carHunter", cascade = CascadeType.ALL)
+    private SocialMedia socialMedia;
+    @OneToOne(mappedBy = "carHunter", cascade = CascadeType.ALL)
+    private ServiceRange serviceRange;
+    @OneToMany(mappedBy = "carHunter", cascade = CascadeType.ALL)
+    private List<Phone> phones;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "city_id")
+    private City city;
 
     public Long getId() {
         return id;
@@ -103,5 +95,45 @@ public class CarHunter  implements Serializable {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+
+    public SocialMedia getSocialMedia() {
+        return socialMedia;
+    }
+
+    public void setSocialMedia(SocialMedia socialMedia) {
+        this.socialMedia = socialMedia;
+    }
+
+    public ServiceRange getServiceRange() {
+        return serviceRange;
+    }
+
+    public void setServiceRange(ServiceRange serviceRange) {
+        this.serviceRange = serviceRange;
+    }
+
+    public List<Phone> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(List<Phone> phones) {
+        this.phones = phones;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 }

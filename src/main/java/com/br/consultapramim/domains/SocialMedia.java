@@ -12,37 +12,12 @@ public class SocialMedia implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "car_hunter_id", nullable = false)
-    private Long id;
-
-    @Column(name = "facebook_url", nullable = true)
-    private String facebookUrl;
-
-    @Column(name = "instagram_url", nullable = true)
-    private String instagramUrl;
-
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "car_hunter_id")
+    @OneToOne(fetch = FetchType.LAZY)
     private CarHunter carHunter;
-
-    public SocialMedia(Long id, String facebookUrl, String instagramUrl, CarHunter carHunter) {
-        this.id = id;
-        this.facebookUrl = facebookUrl;
-        this.instagramUrl = instagramUrl;
-        this.carHunter = carHunter;
-    }
-
-    public SocialMedia() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "facebook_url")
+    private String facebookUrl;
+    @Column(name = "instagram_url")
+    private String instagramUrl;
 
     public String getFacebookUrl() {
         return facebookUrl;
