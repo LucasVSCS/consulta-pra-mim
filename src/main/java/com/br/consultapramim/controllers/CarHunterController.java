@@ -1,6 +1,7 @@
 package com.br.consultapramim.controllers;
 
 import com.br.consultapramim.domains.dtos.CarHunterDTO;
+import com.br.consultapramim.domains.dtos.CarHunterPaginationFilterDTO;
 import com.br.consultapramim.domains.dtos.PaginationResultResponseDTO;
 import com.br.consultapramim.services.CarHunterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,10 @@ public class CarHunterController {
             @RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(required = false) String name
+            @RequestParam(defaultValue = "asc") String sortOrder,
+            CarHunterPaginationFilterDTO paginationFilter
     ) {
-        PaginationResultResponseDTO<CarHunterDTO> carHunterList = carHunterService.getAllCarHunters(pageNo, pageSize, sortBy, name);
+        PaginationResultResponseDTO<CarHunterDTO> carHunterList = carHunterService.getAllCarHunters(pageNo, pageSize, sortBy, sortOrder, paginationFilter);
         return ResponseEntity.ok().body(carHunterList);
     }
 }
