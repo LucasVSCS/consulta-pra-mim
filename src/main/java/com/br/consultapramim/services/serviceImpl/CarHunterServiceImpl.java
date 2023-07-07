@@ -7,6 +7,7 @@ import com.br.consultapramim.domains.dtos.PaginationResultResponseDTO;
 import com.br.consultapramim.domains.specifications.CarHunterSpecification;
 import com.br.consultapramim.repositories.CarHunterRepository;
 import com.br.consultapramim.services.CarHunterService;
+import com.br.consultapramim.services.exceptions.ObjectNotFoundException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class CarHunterServiceImpl implements CarHunterService {
@@ -34,6 +36,15 @@ public class CarHunterServiceImpl implements CarHunterService {
         int totalPages = pagedResult.getTotalPages();
 
         return new PaginationResultResponseDTO<>(pagedResult.map(CarHunterDTO::new).getContent(), pageNo, pageSize, totalPages, totalElements);
+    }
+
+    @Override
+    public CarHunterDTO getCarHunterByExternalId(UUID externalId) {
+        CarHunter carHunter = carHunterRepository.findByExternalId(externalId);
+
+        if (Objects.isNull(carHunter)) throw new ObjectNotFoundException("CarHunter not found");
+
+        return new CarHunterDTO(carHunter);
     }
 
     private Specification<CarHunter> carHunterPaginationFilter(CarHunterPaginationFilterDTO paginationFilter) {

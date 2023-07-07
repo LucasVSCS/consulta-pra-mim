@@ -6,11 +6,12 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class CarHunterDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private String externalId;
+    private UUID externalId;
     private String name;
     private String tradingName;
     private String email;
@@ -58,11 +59,11 @@ public class CarHunterDTO implements Serializable {
         }
     }
 
-    public String getExternalId() {
+    public UUID getExternalId() {
         return externalId;
     }
 
-    public void setExternalId(String externalId) {
+    public void setExternalId(UUID externalId) {
         this.externalId = externalId;
     }
 

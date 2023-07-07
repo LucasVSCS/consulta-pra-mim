@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "car_hunter")
@@ -30,7 +31,7 @@ public class CarHunter implements Serializable {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
     @Column(name = "external_id")
-    private String externalId;
+    private UUID externalId;
     @OneToOne(mappedBy = "carHunter", cascade = CascadeType.ALL)
     private SocialMedia socialMedia;
     @OneToOne(mappedBy = "carHunter", cascade = CascadeType.ALL)
@@ -97,11 +98,11 @@ public class CarHunter implements Serializable {
         isActive = active;
     }
 
-    public String getExternalId() {
+    public UUID getExternalId() {
         return externalId;
     }
 
-    public void setExternalId(String externalId) {
+    public void setExternalId(UUID externalId) {
         this.externalId = externalId;
     }
 

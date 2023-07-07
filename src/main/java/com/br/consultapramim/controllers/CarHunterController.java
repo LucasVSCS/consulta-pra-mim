@@ -7,10 +7,9 @@ import com.br.consultapramim.services.CarHunterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @Validated
@@ -29,5 +28,11 @@ public class CarHunterController {
     ) {
         PaginationResultResponseDTO<CarHunterDTO> carHunterList = carHunterService.getAllCarHunters(pageNo, pageSize, sortBy, sortOrder, paginationFilter);
         return ResponseEntity.ok().body(carHunterList);
+    }
+
+    @GetMapping("/{external-id}")
+    public ResponseEntity<CarHunterDTO> getCarHunterByExternalId(@PathVariable("external-id") UUID externalId) {
+        CarHunterDTO carHunter = carHunterService.getCarHunterByExternalId(externalId);
+        return ResponseEntity.ok().body(carHunter);
     }
 }
