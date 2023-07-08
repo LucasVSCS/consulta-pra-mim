@@ -12,8 +12,8 @@ public class Phone implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "phone_sequence", sequenceName = "sq_phone")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_phone")
+    @SequenceGenerator(name = "sq_phone", sequenceName = "sq_phone", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "area_code", nullable = false)

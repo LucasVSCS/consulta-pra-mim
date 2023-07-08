@@ -13,8 +13,8 @@ public class City implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "city_sequence", sequenceName = "sq_city", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_city")
+    @SequenceGenerator(name = "sq_city", sequenceName = "sq_city", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "name", nullable = false)
@@ -25,8 +25,6 @@ public class City implements Serializable {
     private String ufCode;
     @Column(name = "slug", nullable = false)
     private String slug;
-    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<CarHunter> carHunterList;
 
     public Long getId() {
         return id;
@@ -66,13 +64,5 @@ public class City implements Serializable {
 
     public void setSlug(String slug) {
         this.slug = slug;
-    }
-
-    public List<CarHunter> getCarHunterList() {
-        return carHunterList;
-    }
-
-    public void setCarHunterList(List<CarHunter> carHunterList) {
-        this.carHunterList = carHunterList;
     }
 }
