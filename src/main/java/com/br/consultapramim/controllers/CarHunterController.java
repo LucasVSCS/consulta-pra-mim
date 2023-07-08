@@ -1,6 +1,7 @@
 package com.br.consultapramim.controllers;
 
 import com.br.consultapramim.domains.dtos.CarHunterDTO;
+import com.br.consultapramim.domains.dtos.CarHunterInsertDTO;
 import com.br.consultapramim.domains.dtos.CarHunterPaginationFilterDTO;
 import com.br.consultapramim.domains.dtos.PaginationResultResponseDTO;
 import com.br.consultapramim.services.CarHunterService;
@@ -33,6 +34,12 @@ public class CarHunterController {
     @GetMapping("/{external-id}")
     public ResponseEntity<CarHunterDTO> getCarHunterByExternalId(@PathVariable("external-id") UUID externalId) {
         CarHunterDTO carHunter = carHunterService.getCarHunterByExternalId(externalId);
+        return ResponseEntity.ok().body(carHunter);
+    }
+
+    @PostMapping
+    public ResponseEntity<CarHunterDTO> storeCarHunter(@RequestBody CarHunterInsertDTO carHunterDTO) {
+        CarHunterDTO carHunter = carHunterService.storeCarHunter(carHunterDTO);
         return ResponseEntity.ok().body(carHunter);
     }
 }

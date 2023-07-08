@@ -37,10 +37,12 @@ public class CarHunterDTO implements Serializable {
         this.city.setUfCode(carHunter.getCity().getUfCode());
 
         // Dados dos telefones do Consultor
-        carHunter.getPhones().forEach(phone -> {
-            PhoneDTO phoneDTO = new PhoneDTO(phone);
-            this.phones.add(phoneDTO);
-        });
+        if (carHunter.getPhones() != null){
+            carHunter.getPhones().forEach(phone -> {
+                PhoneDTO phoneDTO = new PhoneDTO(phone);
+                this.phones.add(phoneDTO);
+            });
+        }
 
         // Dados das redes sociais do Consultor
         if (carHunter.getSocialMedia() != null) {

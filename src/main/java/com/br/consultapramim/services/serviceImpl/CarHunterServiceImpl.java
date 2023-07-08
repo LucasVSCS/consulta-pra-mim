@@ -1,11 +1,14 @@
 package com.br.consultapramim.services.serviceImpl;
 
 import com.br.consultapramim.domains.CarHunter;
+import com.br.consultapramim.domains.City;
 import com.br.consultapramim.domains.dtos.CarHunterDTO;
+import com.br.consultapramim.domains.dtos.CarHunterInsertDTO;
 import com.br.consultapramim.domains.dtos.CarHunterPaginationFilterDTO;
 import com.br.consultapramim.domains.dtos.PaginationResultResponseDTO;
 import com.br.consultapramim.domains.specifications.CarHunterSpecification;
 import com.br.consultapramim.repositories.CarHunterRepository;
+import com.br.consultapramim.repositories.CityRepository;
 import com.br.consultapramim.services.CarHunterService;
 import com.br.consultapramim.services.exceptions.ObjectNotFoundException;
 import org.apache.logging.log4j.util.Strings;
@@ -23,6 +26,8 @@ import java.util.UUID;
 public class CarHunterServiceImpl implements CarHunterService {
     @Autowired
     private CarHunterRepository carHunterRepository;
+    @Autowired
+    private CityRepository cityRepository;
 
     @Override
     public PaginationResultResponseDTO<CarHunterDTO> getAllCarHunters(Integer pageNo, Integer pageSize, String sortBy, String sortOrder, CarHunterPaginationFilterDTO paginationFilter) {
@@ -45,6 +50,15 @@ public class CarHunterServiceImpl implements CarHunterService {
         if (Objects.isNull(carHunter)) throw new ObjectNotFoundException("CarHunter not found");
 
         return new CarHunterDTO(carHunter);
+    }
+
+    @Override
+    public CarHunterDTO storeCarHunter(CarHunterInsertDTO carHunterInsertDTO) {
+        CarHunter carHunter = new CarHunter(carHunterInsertDTO);
+        City city = cityRepository.findById(carHunterInsertDTO.getCityId()).orElseThrow(() -> new ObjectNotFoundException("City not found"));
+        carHunter.setCity(city);
+
+        return new CarHunterDTO(carHunterRepository.save(carHunter));
     }
 
     private Specification<CarHunter> carHunterPaginationFilter(CarHunterPaginationFilterDTO paginationFilter) {

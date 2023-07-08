@@ -1,5 +1,6 @@
 package com.br.consultapramim.domains;
 
+import com.br.consultapramim.domains.dtos.CarHunterInsertDTO;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -14,8 +15,8 @@ public class CarHunter implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "car_hunter_sequence", sequenceName = "sq_car_hunter")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_car_hunter")
+    @SequenceGenerator(name = "sq_car_hunter", sequenceName = "sq_car_hunter", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "name", nullable = false)
@@ -28,9 +29,9 @@ public class CarHunter implements Serializable {
     private String logoUrl;
     @Column(name = "service_description")
     private String serviceDescription;
-    @Column(name = "is_active", nullable = false)
+    @Column(name = "is_active")
     private Boolean isActive;
-    @Column(name = "external_id")
+    @Column(name = "external_id", insertable = false, updatable = false)
     private UUID externalId;
     @OneToOne(mappedBy = "carHunter", cascade = CascadeType.ALL)
     private SocialMedia socialMedia;
@@ -41,6 +42,17 @@ public class CarHunter implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "city_id")
     private City city;
+
+    public CarHunter(CarHunterInsertDTO carHunter) {
+        this.name = carHunter.getName();
+        this.tradingName = carHunter.getTradingName();
+        this.email = carHunter.getEmail();
+        this.isActive = false;
+    }
+
+    public CarHunter() {
+
+    }
 
     public Long getId() {
         return id;
