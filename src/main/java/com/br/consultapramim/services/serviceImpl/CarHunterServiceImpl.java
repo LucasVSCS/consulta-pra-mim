@@ -11,6 +11,9 @@ import com.br.consultapramim.repositories.CarHunterRepository;
 import com.br.consultapramim.repositories.CityRepository;
 import com.br.consultapramim.services.CarHunterService;
 import com.br.consultapramim.services.exceptions.ObjectNotFoundException;
+import com.br.consultapramim.utils.MessageResponse;
+import com.br.consultapramim.utils.MessageUtil;
+import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -59,6 +62,24 @@ public class CarHunterServiceImpl implements CarHunterService {
         carHunter.setCity(city);
 
         return new CarHunterDTO(carHunterRepository.save(carHunter));
+    }
+
+    @Transactional
+    @Override
+    public MessageResponse updateCarHunter(UUID externalId, CarHunterInsertDTO carHunterInsertDTO) {
+        CarHunter carHunter = carHunterRepository.findByExternalId(externalId);
+
+        if (Objects.isNull(carHunter)) throw new ObjectNotFoundException("CarHunter not found");
+
+        carHunter.setName(carHunterInsertDTO.getName());
+        carHunter.setTradingName(carHunterInsertDTO.getTradingName());
+        carHunter.setEmail(carHunterInsertDTO.getEmail());
+
+        City city = cityRepository.findById(carHunterInsertDTO.getCityId()).orElseThrow(() -> new ObjectNotFoundException("City not found"));
+        carHunter.setCity(city);
+        carHunterRepository.save(carHunter);
+
+        return new MessageResponse(MessageUtil.MSE_S01.getMsgAbbreviation(), MessageUtil.MSE_S01.getMsgDescription());
     }
 
     private Specification<CarHunter> carHunterPaginationFilter(CarHunterPaginationFilterDTO paginationFilter) {

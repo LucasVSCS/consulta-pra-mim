@@ -5,6 +5,7 @@ import com.br.consultapramim.domains.dtos.CarHunterInsertDTO;
 import com.br.consultapramim.domains.dtos.CarHunterPaginationFilterDTO;
 import com.br.consultapramim.domains.dtos.PaginationResultResponseDTO;
 import com.br.consultapramim.services.CarHunterService;
+import com.br.consultapramim.utils.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -41,5 +42,10 @@ public class CarHunterController {
     public ResponseEntity<CarHunterDTO> storeCarHunter(@RequestBody CarHunterInsertDTO carHunterDTO) {
         CarHunterDTO carHunter = carHunterService.storeCarHunter(carHunterDTO);
         return ResponseEntity.ok().body(carHunter);
+    }
+
+    @PutMapping("/{external-id}")
+    public MessageResponse updateCarHunter(@PathVariable("external-id") UUID externalId, @RequestBody CarHunterInsertDTO carHunterDTO) {
+        return carHunterService.updateCarHunter(externalId, carHunterDTO);
     }
 }
