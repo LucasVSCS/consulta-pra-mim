@@ -1,5 +1,6 @@
 package com.br.consultapramim.domains;
 
+import com.br.consultapramim.domains.dtos.ServiceRangeDTO;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -12,7 +13,12 @@ public class ServiceRange implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @OneToOne(fetch = FetchType.LAZY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "car_hunter_id")
+    private Long id;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @MapsId
+    @JoinColumn(name = "car_hunter_id")
     private CarHunter carHunter;
     @Column(name = "search_radius")
     private Integer searchRadius;
@@ -25,7 +31,30 @@ public class ServiceRange implements Serializable {
     @Column(name = "price_max")
     private Double priceMax;
     @Column(name = "brand_new")
-    private Boolean brandNew;
+    private boolean brandNew;
+
+    public ServiceRange(ServiceRangeDTO serviceRange, CarHunter carHunter) {
+        this.searchRadius = serviceRange.getSearchRadius();
+        this.yearMin = serviceRange.getYearMin();
+        this.yearMax = serviceRange.getYearMax();
+        this.priceMin = serviceRange.getPriceMin();
+        this.priceMax = serviceRange.getPriceMax();
+        this.brandNew = serviceRange.getBrandNew();
+        this.carHunter = carHunter;
+    }
+
+    public ServiceRange() {
+
+    }
+
+    public ServiceRange(ServiceRangeDTO serviceRange) {
+        this.searchRadius = serviceRange.getSearchRadius();
+        this.yearMin = serviceRange.getYearMin();
+        this.yearMax = serviceRange.getYearMax();
+        this.priceMin = serviceRange.getPriceMin();
+        this.priceMax = serviceRange.getPriceMax();
+        this.brandNew = serviceRange.getBrandNew();
+    }
 
     public Integer getSearchRadius() {
         return searchRadius;
@@ -75,11 +104,11 @@ public class ServiceRange implements Serializable {
         this.carHunter = carHunter;
     }
 
-    public Boolean getBrandNew() {
+    public boolean getBrandNew() {
         return brandNew;
     }
 
-    public void setBrandNew(Boolean brandNew) {
+    public void setBrandNew(boolean brandNew) {
         this.brandNew = brandNew;
     }
 }

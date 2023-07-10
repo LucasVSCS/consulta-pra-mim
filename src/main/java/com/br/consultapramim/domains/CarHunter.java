@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -36,8 +37,9 @@ public class CarHunter implements Serializable {
     @OneToOne(mappedBy = "carHunter", cascade = CascadeType.ALL)
     private SocialMedia socialMedia;
     @OneToOne(mappedBy = "carHunter", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
     private ServiceRange serviceRange;
-    @OneToMany(mappedBy = "carHunter", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "carHunter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Phone> phones;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "city_id")

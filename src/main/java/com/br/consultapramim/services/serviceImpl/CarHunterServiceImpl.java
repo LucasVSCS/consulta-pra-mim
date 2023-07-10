@@ -2,14 +2,14 @@ package com.br.consultapramim.services.serviceImpl;
 
 import com.br.consultapramim.domains.CarHunter;
 import com.br.consultapramim.domains.City;
-import com.br.consultapramim.domains.dtos.CarHunterDTO;
-import com.br.consultapramim.domains.dtos.CarHunterInsertDTO;
-import com.br.consultapramim.domains.dtos.CarHunterPaginationFilterDTO;
-import com.br.consultapramim.domains.dtos.PaginationResultResponseDTO;
+import com.br.consultapramim.domains.Phone;
+import com.br.consultapramim.domains.ServiceRange;
+import com.br.consultapramim.domains.dtos.*;
 import com.br.consultapramim.domains.specifications.CarHunterSpecification;
 import com.br.consultapramim.repositories.CarHunterRepository;
 import com.br.consultapramim.repositories.CityRepository;
 import com.br.consultapramim.services.CarHunterService;
+import com.br.consultapramim.services.exceptions.InternalServerErrorException;
 import com.br.consultapramim.services.exceptions.ObjectNotFoundException;
 import com.br.consultapramim.utils.MessageResponse;
 import com.br.consultapramim.utils.MessageUtil;
@@ -22,8 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class CarHunterServiceImpl implements CarHunterService {
@@ -67,19 +66,38 @@ public class CarHunterServiceImpl implements CarHunterService {
     @Transactional
     @Override
     public MessageResponse updateCarHunter(UUID externalId, CarHunterInsertDTO carHunterInsertDTO) {
-        CarHunter carHunter = carHunterRepository.findByExternalId(externalId);
+        try {
+            CarHunter carHunter = carHunterRepository.findByExternalId(externalId);
 
-        if (Objects.isNull(carHunter)) throw new ObjectNotFoundException("CarHunter not found");
+            if (Objects.isNull(carHunter)) throw new ObjectNotFoundException("CarHunter not found");
 
-        carHunter.setName(carHunterInsertDTO.getName());
-        carHunter.setTradingName(carHunterInsertDTO.getTradingName());
-        carHunter.setEmail(carHunterInsertDTO.getEmail());
+            carHunter.setName(carHunterInsertDTO.getName());
+            carHunter.setTradingName(carHunterInsertDTO.getTradingName());
+            carHunter.setEmail(carHunterInsertDTO.getEmail());
 
-        City city = cityRepository.findById(carHunterInsertDTO.getCityId()).orElseThrow(() -> new ObjectNotFoundException("City not found"));
-        carHunter.setCity(city);
-        carHunterRepository.save(carHunter);
+            City city = cityRepository.findById(carHunterInsertDTO.getCityId()).orElseThrow(() -> new ObjectNotFoundException("City not found"));
+            carHunter.setCity(city);
 
-        return new MessageResponse(MessageUtil.MSE_S01.getMsgAbbreviation(), MessageUtil.MSE_S01.getMsgDescription());
+            carHunter.getPhones().clear();
+            carHunter.getPhones().addAll(carHunterInsertDTO.getPhones().stream().map(phone -> new Phone(phone, carHunter)).toList());
+
+            if(carHunter.getServiceRange() == null) {
+                carHunter.setServiceRange(new ServiceRange(carHunterInsertDTO.getServiceRange(), carHunter));
+            }else{
+                carHunter.getServiceRange().setSearchRadius(carHunterInsertDTO.getServiceRange().getSearchRadius());
+                carHunter.getServiceRange().setYearMin(carHunterInsertDTO.getServiceRange().getYearMin());
+                carHunter.getServiceRange().setYearMax(carHunterInsertDTO.getServiceRange().getYearMax());
+                carHunter.getServiceRange().setPriceMin(carHunterInsertDTO.getServiceRange().getPriceMin());
+                carHunter.getServiceRange().setPriceMax(carHunterInsertDTO.getServiceRange().getPriceMax());
+                carHunter.getServiceRange().setBrandNew(carHunterInsertDTO.getServiceRange().getBrandNew());
+            }
+
+            carHunterRepository.saveAndFlush(carHunter);
+
+            return new MessageResponse(MessageUtil.MSE_S01.getMsgAbbreviation(), MessageUtil.MSE_S01.getMsgDescription());
+        } catch (Exception e) {
+            throw new InternalServerErrorException("Error on update CarHunter");
+        }
     }
 
     private Specification<CarHunter> carHunterPaginationFilter(CarHunterPaginationFilterDTO paginationFilter) {

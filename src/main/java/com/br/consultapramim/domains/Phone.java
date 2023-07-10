@@ -1,5 +1,6 @@
 package com.br.consultapramim.domains;
 
+import com.br.consultapramim.domains.dtos.PhoneDTO;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -21,10 +22,27 @@ public class Phone implements Serializable {
     @Column(name = "number", nullable = false)
     private String number;
     @Column(name = "is_whatsapp", nullable = false)
-    private Boolean isWhatsapp;
+    private boolean isWhatsapp;
     @ManyToOne
     @JoinColumn(name = "car_hunter_id", nullable = false)
     private CarHunter carHunter;
+
+    public Phone(PhoneDTO phone) {
+        this.areaCode = phone.getAreaCode();
+        this.number = phone.getNumber();
+        this.isWhatsapp = phone.isWhatsapp();
+    }
+
+    public Phone(PhoneDTO phone, CarHunter carHunter) {
+        this.areaCode = phone.getAreaCode();
+        this.number = phone.getNumber();
+        this.isWhatsapp = phone.isWhatsapp();
+        this.carHunter = carHunter;
+    }
+
+    public Phone() {
+
+    }
 
     public Long getId() {
         return id;
@@ -50,11 +68,11 @@ public class Phone implements Serializable {
         this.number = number;
     }
 
-    public Boolean getWhatsapp() {
+    public boolean isWhatsapp() {
         return isWhatsapp;
     }
 
-    public void setWhatsapp(Boolean whatsapp) {
+    public void setIsWhatsapp(boolean whatsapp) {
         isWhatsapp = whatsapp;
     }
 

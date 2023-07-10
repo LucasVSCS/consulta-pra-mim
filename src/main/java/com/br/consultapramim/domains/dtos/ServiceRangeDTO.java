@@ -11,7 +11,7 @@ public class ServiceRangeDTO implements Serializable {
     private Integer yearMax;
     private Double priceMin;
     private Double priceMax;
-    private Boolean brandNew;
+    private boolean brandNew;
 
     public Integer getSearchRadius() {
         return searchRadius;
@@ -53,11 +53,11 @@ public class ServiceRangeDTO implements Serializable {
         this.priceMax = priceMax;
     }
 
-    public Boolean getBrandNew() {
+    public boolean getBrandNew() {
         return brandNew;
     }
 
-    public void setBrandNew(Boolean brandNew) {
+    public void setBrandNew(boolean brandNew) {
         this.brandNew = brandNew;
     }
 }

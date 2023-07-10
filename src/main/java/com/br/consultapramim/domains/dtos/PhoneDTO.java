@@ -10,7 +10,7 @@ public class PhoneDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     private String areaCode;
     private String number;
-    private Boolean isWhatsapp;
+    private boolean isWhatsapp;
 
     public PhoneDTO() {
     }
@@ -18,7 +18,7 @@ public class PhoneDTO implements Serializable {
     public PhoneDTO(Phone phone) {
         this.areaCode = phone.getAreaCode();
         this.number = phone.getNumber();
-        this.isWhatsapp = phone.getWhatsapp();
+        this.isWhatsapp = phone.isWhatsapp();
     }
 
     public String getAreaCode() {
@@ -37,11 +37,11 @@ public class PhoneDTO implements Serializable {
         this.number = number;
     }
 
-    public Boolean getWhatsapp() {
+    public boolean isWhatsapp() {
         return isWhatsapp;
     }
 
-    public void setWhatsapp(Boolean whatsapp) {
+    public void setIsWhatsapp(boolean whatsapp) {
         isWhatsapp = whatsapp;
     }
 }
