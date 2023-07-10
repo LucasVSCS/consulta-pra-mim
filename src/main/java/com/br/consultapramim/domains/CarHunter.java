@@ -35,6 +35,7 @@ public class CarHunter implements Serializable {
     @Column(name = "external_id", insertable = false, updatable = false)
     private UUID externalId;
     @OneToOne(mappedBy = "carHunter", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
     private SocialMedia socialMedia;
     @OneToOne(mappedBy = "carHunter", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn

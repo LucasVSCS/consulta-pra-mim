@@ -1,9 +1,6 @@
 package com.br.consultapramim.services.serviceImpl;
 
-import com.br.consultapramim.domains.CarHunter;
-import com.br.consultapramim.domains.City;
-import com.br.consultapramim.domains.Phone;
-import com.br.consultapramim.domains.ServiceRange;
+import com.br.consultapramim.domains.*;
 import com.br.consultapramim.domains.dtos.*;
 import com.br.consultapramim.domains.specifications.CarHunterSpecification;
 import com.br.consultapramim.repositories.CarHunterRepository;
@@ -90,6 +87,13 @@ public class CarHunterServiceImpl implements CarHunterService {
                 carHunter.getServiceRange().setPriceMin(carHunterInsertDTO.getServiceRange().getPriceMin());
                 carHunter.getServiceRange().setPriceMax(carHunterInsertDTO.getServiceRange().getPriceMax());
                 carHunter.getServiceRange().setBrandNew(carHunterInsertDTO.getServiceRange().getBrandNew());
+            }
+
+            if (carHunter.getSocialMedia() == null){
+                carHunter.setSocialMedia(new SocialMedia(carHunterInsertDTO.getSocialMedia(), carHunter));
+            }else{
+                carHunter.getSocialMedia().setFacebookUrl(carHunterInsertDTO.getSocialMedia().getFacebookUrl());
+                carHunter.getSocialMedia().setInstagramUrl(carHunterInsertDTO.getSocialMedia().getInstagramUrl());
             }
 
             carHunterRepository.saveAndFlush(carHunter);

@@ -1,5 +1,6 @@
 package com.br.consultapramim.domains;
 
+import com.br.consultapramim.domains.dtos.SocialMediaDTO;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -12,12 +13,26 @@ public class SocialMedia implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @OneToOne(fetch = FetchType.LAZY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "car_hunter_id")
+    private Long id;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @MapsId
+    @JoinColumn(name = "car_hunter_id")
     private CarHunter carHunter;
     @Column(name = "facebook_url")
     private String facebookUrl;
     @Column(name = "instagram_url")
     private String instagramUrl;
+
+    public SocialMedia(SocialMediaDTO socialMedia, CarHunter carHunter) {
+        this.facebookUrl = socialMedia.getFacebookUrl();
+        this.instagramUrl = socialMedia.getInstagramUrl();
+        this.carHunter = carHunter;
+    }
+
+    public SocialMedia() {
+    }
 
     public String getFacebookUrl() {
         return facebookUrl;
