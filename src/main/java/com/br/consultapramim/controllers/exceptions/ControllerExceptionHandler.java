@@ -4,8 +4,11 @@ import com.br.consultapramim.services.exceptions.InternalServerErrorException;
 import com.br.consultapramim.services.exceptions.ObjectNotFoundException;
 import com.br.consultapramim.utils.MessageUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpServerErrorException;
@@ -43,5 +46,14 @@ public class ControllerExceptionHandler {
     public ResponseEntity<StandardError> httpServerErrorException(HttpServerErrorException e, HttpServletRequest request) {
         StandardError err = new StandardError(HttpStatus.INTERNAL_SERVER_ERROR.value(), MessageUtil.MSG_E01, System.currentTimeMillis(), e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(err);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e, HttpServletRequest request) {
+        ValidationError err = new ValidationError(HttpStatus.BAD_REQUEST.value(), MessageUtil.MSG_A01, System.currentTimeMillis());
+        for (FieldError x : e.getBindingResult().getFieldErrors()) {
+            err.addError(x.getField(), x.getDefaultMessage());
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 }

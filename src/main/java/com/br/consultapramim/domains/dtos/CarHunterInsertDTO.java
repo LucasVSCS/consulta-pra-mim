@@ -1,14 +1,24 @@
 package com.br.consultapramim.domains.dtos;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CarHunterInsertDTO implements Serializable {
+    @NotBlank(message = "Campo Nome obrigatório")
     private String name;
+    @NotBlank(message = "Campo Nome da empresa obrigatório")
     private String tradingName;
+    @Email
+    @NotBlank(message = "Campo Email obrigatório")
     private String email;
+    @NotBlank(message = "Campo Cidade obrigatório")
     private Long cityId;
+    @NotBlank(message = "Campo Descrição do Serviço obrigatório")
+    private String serviceDescription;
     private List<PhoneDTO> phones = new ArrayList<>();
     private SocialMediaDTO socialMedia;
     private ServiceRangeDTO serviceRange;
@@ -43,6 +53,14 @@ public class CarHunterInsertDTO implements Serializable {
 
     public void setCityId(Long cityId) {
         this.cityId = cityId;
+    }
+
+    public String getServiceDescription() {
+        return serviceDescription;
+    }
+
+    public void setServiceDescription(String serviceDescription) {
+        this.serviceDescription = serviceDescription;
     }
 
     public List<PhoneDTO> getPhones() {

@@ -6,6 +6,7 @@ import com.br.consultapramim.domains.dtos.CarHunterPaginationFilterDTO;
 import com.br.consultapramim.domains.dtos.PaginationResultResponseDTO;
 import com.br.consultapramim.services.CarHunterService;
 import com.br.consultapramim.utils.MessageResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -39,7 +40,7 @@ public class CarHunterController {
     }
 
     @PostMapping
-    public ResponseEntity<CarHunterDTO> storeCarHunter(@RequestBody CarHunterInsertDTO carHunterDTO) {
+    public ResponseEntity<CarHunterDTO> storeCarHunter(@Valid @RequestBody CarHunterInsertDTO carHunterDTO) {
         CarHunterDTO carHunter = carHunterService.storeCarHunter(carHunterDTO);
         return ResponseEntity.ok().body(carHunter);
     }
