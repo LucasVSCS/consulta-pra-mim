@@ -4,6 +4,7 @@ import com.br.consultapramim.domains.dtos.CarHunterDTO;
 import com.br.consultapramim.domains.dtos.CarHunterInsertDTO;
 import com.br.consultapramim.domains.dtos.CarHunterPaginationFilterDTO;
 import com.br.consultapramim.domains.dtos.PaginationResultResponseDTO;
+import com.br.consultapramim.repositories.CarHunterRepository;
 import com.br.consultapramim.services.CarHunterService;
 import com.br.consultapramim.utils.MessageResponse;
 import jakarta.validation.Valid;
@@ -20,6 +21,8 @@ import java.util.UUID;
 public class CarHunterController {
     @Autowired
     private CarHunterService carHunterService;
+    @Autowired
+    private CarHunterRepository carHunterRepository;
 
     @GetMapping
     public ResponseEntity<PaginationResultResponseDTO<CarHunterDTO>> getCarHunter(
@@ -48,5 +51,10 @@ public class CarHunterController {
     @PutMapping("/{external-id}")
     public MessageResponse updateCarHunter(@PathVariable("external-id") UUID externalId, @RequestBody CarHunterInsertDTO carHunterDTO) {
         return carHunterService.updateCarHunter(externalId, carHunterDTO);
+    }
+
+    @DeleteMapping("/{external-id}")
+    public MessageResponse deleteCarHunter(@PathVariable("external-id") UUID externalId) {
+        return carHunterService.deleteCarHunter(externalId);
     }
 }

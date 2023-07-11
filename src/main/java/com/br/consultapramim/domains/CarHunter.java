@@ -28,11 +28,11 @@ public class CarHunter implements Serializable {
     private String email;
     @Column(name = "logo_url")
     private String logoUrl;
-    @Column(name = "service_description")
+    @Column(name = "service_description", columnDefinition = "TEXT")
     private String serviceDescription;
     @Column(name = "is_active")
     private Boolean isActive;
-    @Column(name = "external_id", insertable = false, updatable = false)
+    @Column(name = "external_id", insertable = false, updatable = false, unique = true)
     private UUID externalId;
     @OneToOne(mappedBy = "carHunter", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
@@ -50,6 +50,7 @@ public class CarHunter implements Serializable {
         this.name = carHunter.getName();
         this.tradingName = carHunter.getTradingName();
         this.email = carHunter.getEmail();
+        this.serviceDescription = carHunter.getServiceDescription();
         this.isActive = false;
     }
 

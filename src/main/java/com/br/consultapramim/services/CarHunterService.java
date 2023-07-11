@@ -13,4 +13,5 @@ public interface CarHunterService {
     CarHunterDTO getCarHunterByExternalId(UUID externalId);
     CarHunterDTO storeCarHunter(CarHunterInsertDTO carHunterDTO);
     MessageResponse updateCarHunter(UUID externalId, CarHunterInsertDTO carHunterDTO);
+    MessageResponse deleteCarHunter(UUID externalId);
 }

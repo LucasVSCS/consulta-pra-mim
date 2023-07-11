@@ -2,6 +2,7 @@ package com.br.consultapramim.domains.dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class CarHunterInsertDTO implements Serializable {
     @Email
     @NotBlank(message = "Campo Email obrigatório")
     private String email;
-    @NotBlank(message = "Campo Cidade obrigatório")
+    @NotNull(message = "Campo Cidade obrigatório")
     private Long cityId;
     @NotBlank(message = "Campo Descrição do Serviço obrigatório")
     private String serviceDescription;

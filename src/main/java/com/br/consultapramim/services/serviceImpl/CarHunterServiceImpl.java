@@ -71,6 +71,7 @@ public class CarHunterServiceImpl implements CarHunterService {
             carHunter.setName(carHunterInsertDTO.getName());
             carHunter.setTradingName(carHunterInsertDTO.getTradingName());
             carHunter.setEmail(carHunterInsertDTO.getEmail());
+            carHunter.setServiceDescription(carHunterInsertDTO.getServiceDescription());
 
             City city = cityRepository.findById(carHunterInsertDTO.getCityId()).orElseThrow(() -> new ObjectNotFoundException("City not found"));
             carHunter.setCity(city);
@@ -98,9 +99,24 @@ public class CarHunterServiceImpl implements CarHunterService {
 
             carHunterRepository.saveAndFlush(carHunter);
 
-            return new MessageResponse(MessageUtil.MSE_S01.getMsgAbbreviation(), MessageUtil.MSE_S01.getMsgDescription());
+            return new MessageResponse(MessageUtil.MSE_S01.getMsgAbbreviation(), MessageUtil.MSE_S01.getMsgDescription("Consultor"));
         } catch (Exception e) {
             throw new InternalServerErrorException("Error on update CarHunter");
+        }
+    }
+
+    @Override
+    public MessageResponse deleteCarHunter(UUID externalId) {
+        try {
+            CarHunter carHunter = carHunterRepository.findByExternalId(externalId);
+
+            if (Objects.isNull(carHunter)) throw new ObjectNotFoundException("CarHunter not found");
+
+            carHunterRepository.delete(carHunter);
+
+            return new MessageResponse(MessageUtil.MSE_S02.getMsgAbbreviation(), MessageUtil.MSE_S02.getMsgDescription("Consultor"));
+        } catch (Exception e) {
+            throw new InternalServerErrorException("Error on delete CarHunter");
         }
     }
 

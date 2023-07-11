@@ -10,7 +10,8 @@ public enum MessageUtil {
     MSG_E01("MSG_E01", "Erro interno no sistema."),
 
     // Sucessos Específicos
-    MSE_S01("MSE_S01", "Consultor atualizado com sucesso!"),
+    MSE_S01("MSE_S01", "%s atualizado com sucesso!"),
+    MSE_S02("MSE_S02", "%s removido com sucesso!"),
 
     // Alertas Específicos
     MSE_A01("MSE_A01", "Alerta 1"),
