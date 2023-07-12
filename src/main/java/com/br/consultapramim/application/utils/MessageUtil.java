@@ -12,12 +12,13 @@ public enum MessageUtil {
     // Sucessos Específicos
     MSE_S01("MSE_S01", "%s atualizado com sucesso!"),
     MSE_S02("MSE_S02", "%s removido com sucesso!"),
+    MSE_S03("MSE_S03", "%s inserido com sucesso!"),
 
     // Alertas Específicos
     MSE_A01("MSE_A01", "Alerta 1"),
 
     // Erros Específicos
-    MSE_E01("MSE_E01", "Erro E1");
+    MSE_E01("MSE_E01", "%s já esta em uso!");
 
     private final String msgAbbreviation;
     private final String msgDescription;
