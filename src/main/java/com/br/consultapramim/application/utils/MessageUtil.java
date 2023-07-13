@@ -5,6 +5,7 @@ public enum MessageUtil {
     // Alertas Genéricos
     MSG_A01("MSG_A01", "Dados inválidos."),
     MSG_A02("MSG_A02", "Acesso Negado."),
+    MSG_A03("MSG_A03", "%s não encontrado."),
 
     // Erros Genéricos
     MSG_E01("MSG_E01", "Erro interno no sistema."),

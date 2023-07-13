@@ -1,49 +1,37 @@
 package com.br.consultapramim.security.domains.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Set;
 
-public class SignupRequestDTO {
+public class SignupRequestDTO implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+    @NotBlank(message = "Nome de usuário é obrigatório")
     private String username;
+    @NotBlank(message = "Email é obrigatório")
     private String email;
+    @NotBlank(message = "Senha é obrigatório")
     private String password;
+    @NotNull(message = "Cargo é obrigatório")
     private Set<String> role;
-
-    public SignupRequestDTO(String username, String email, String password, Set<String> role) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
 
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Set<String> getRole() {
         return role;
-    }
-
-    public void setRole(Set<String> role) {
-        this.role = role;
     }
 }

@@ -11,22 +11,19 @@ import com.br.consultapramim.security.domains.enums.RoleEnum;
 import com.br.consultapramim.security.repositories.RoleRepository;
 import com.br.consultapramim.security.repositories.UserRepository;
 import com.br.consultapramim.security.services.AuthenticationService;
-import com.br.consultapramim.security.services.JwtService;
 import com.br.consultapramim.security.utils.JwtUtils;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -35,10 +32,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private JwtService jwtService;
-    @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private RoleRepository roleRepository;
@@ -46,7 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private JwtUtils jwtUtils;
 
     @Override
-    public MessageResponse signup(@Valid @RequestBody SignupRequestDTO signUpRequest) {
+    public MessageResponse signup(SignupRequestDTO signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             throw new IllegalArgumentException(MessageUtil.MSE_E01.getMsgDescription("Nome de usuário"));
         }
@@ -63,11 +56,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         strRoles.forEach(role -> {
             if (role.equals("admin")) {
                 Role adminRole = roleRepository.findByName(RoleEnum.ADMIN)
-                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        .orElseThrow(() -> new RuntimeException(MessageUtil.MSG_A03.getMsgDescription("Cargo")));
                 roles.add(adminRole);
             } else {
                 Role userRole = roleRepository.findByName(RoleEnum.USER)
-                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        .orElseThrow(() -> new RuntimeException(MessageUtil.MSG_A03.getMsgDescription("Cargo")));
                 roles.add(userRole);
             }
         });
@@ -84,12 +77,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .authenticate(new UsernamePasswordAuthenticationToken(signinRequest.getUsername(), signinRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+        String jwt = "Bearer " + jwtUtils.generateJwtToken(authentication);
 
         UserDetailsServiceImpl userDetails = (UserDetailsServiceImpl) authentication.getPrincipal();
 
-        List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
+        List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
-        return new JwtAuthenticationResponseDTO(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles);
+        return new JwtAuthenticationResponseDTO(userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), jwt, roles);
     }
 }

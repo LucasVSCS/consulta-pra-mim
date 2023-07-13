@@ -20,7 +20,6 @@ public class JwtUtils {
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {
-
         UserDetailsServiceImpl userPrincipal = (UserDetailsServiceImpl) authentication.getPrincipal();
 
         return Jwts.builder()
@@ -43,15 +42,16 @@ public class JwtUtils {
     public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
+
             return true;
         } catch (MalformedJwtException e) {
-            throw new MalformedJwtException("Invalid JWT token: " + e.getMessage());
+            throw new MalformedJwtException("Token JWT Inválido");
         } catch (ExpiredJwtException e) {
-            throw new ExpiredJwtException(null, null, "JWT token is expired: " + e.getMessage());
+            throw new ExpiredJwtException(null, null, "Token JWT expirado");
         } catch (UnsupportedJwtException e) {
-            throw new UnsupportedJwtException("JWT token is unsupported: " + e.getMessage());
+            throw new UnsupportedJwtException("Token JWT não suportado");
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("JWT claims string is empty: " + e.getMessage());
+            throw new IllegalArgumentException("Claims JWT está vazia");
         }
 
     }
