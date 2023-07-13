@@ -79,28 +79,33 @@ public class CarHunterServiceImpl implements CarHunterService {
             carHunter.getPhones().clear();
             carHunter.getPhones().addAll(carHunterInsertDTO.getPhones().stream().map(phone -> new Phone(phone, carHunter)).toList());
 
-            if(carHunter.getServiceRange() == null) {
-                carHunter.setServiceRange(new ServiceRange(carHunterInsertDTO.getServiceRange(), carHunter));
-            }else{
-                carHunter.getServiceRange().setSearchRadius(carHunterInsertDTO.getServiceRange().getSearchRadius());
-                carHunter.getServiceRange().setYearMin(carHunterInsertDTO.getServiceRange().getYearMin());
-                carHunter.getServiceRange().setYearMax(carHunterInsertDTO.getServiceRange().getYearMax());
-                carHunter.getServiceRange().setPriceMin(carHunterInsertDTO.getServiceRange().getPriceMin());
-                carHunter.getServiceRange().setPriceMax(carHunterInsertDTO.getServiceRange().getPriceMax());
-                carHunter.getServiceRange().setBrandNew(carHunterInsertDTO.getServiceRange().getBrandNew());
+            if (carHunterInsertDTO.getServiceRange() != null){
+                if(carHunter.getServiceRange() == null) {
+                    carHunter.setServiceRange(new ServiceRange(carHunterInsertDTO.getServiceRange(), carHunter));
+                }else{
+                    carHunter.getServiceRange().setSearchRadius(carHunterInsertDTO.getServiceRange().getSearchRadius());
+                    carHunter.getServiceRange().setYearMin(carHunterInsertDTO.getServiceRange().getYearMin());
+                    carHunter.getServiceRange().setYearMax(carHunterInsertDTO.getServiceRange().getYearMax());
+                    carHunter.getServiceRange().setPriceMin(carHunterInsertDTO.getServiceRange().getPriceMin());
+                    carHunter.getServiceRange().setPriceMax(carHunterInsertDTO.getServiceRange().getPriceMax());
+                    carHunter.getServiceRange().setBrandNew(carHunterInsertDTO.getServiceRange().getBrandNew());
+                }
             }
 
-            if (carHunter.getSocialMedia() == null){
-                carHunter.setSocialMedia(new SocialMedia(carHunterInsertDTO.getSocialMedia(), carHunter));
-            }else{
-                carHunter.getSocialMedia().setFacebookUrl(carHunterInsertDTO.getSocialMedia().getFacebookUrl());
-                carHunter.getSocialMedia().setInstagramUrl(carHunterInsertDTO.getSocialMedia().getInstagramUrl());
+            if (carHunterInsertDTO.getSocialMedia() != null){
+                if (carHunter.getSocialMedia() == null){
+                    carHunter.setSocialMedia(new SocialMedia(carHunterInsertDTO.getSocialMedia(), carHunter));
+                }else{
+                    carHunter.getSocialMedia().setFacebookUrl(carHunterInsertDTO.getSocialMedia().getFacebookUrl());
+                    carHunter.getSocialMedia().setInstagramUrl(carHunterInsertDTO.getSocialMedia().getInstagramUrl());
+                }
             }
 
             carHunterRepository.saveAndFlush(carHunter);
 
             return new MessageResponse(MessageUtil.MSE_S01.getMsgAbbreviation(), MessageUtil.MSE_S01.getMsgDescription("Consultor"));
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new InternalServerErrorException("Error on update CarHunter");
         }
     }
