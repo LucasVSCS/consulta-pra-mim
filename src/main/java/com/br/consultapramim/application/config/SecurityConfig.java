@@ -1,13 +1,17 @@
 package com.br.consultapramim.application.config;
 
+import com.br.consultapramim.security.domains.enums.RoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,10 +23,26 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
     @Autowired
-    private UserDetailsService userDetailsService;
+    private ApplicationContext applicationContext;
 
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(getUnauthorizedHandler()))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/auth/signin").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/car-hunters/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/car-hunters").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/cities/**").permitAll()
+                        .requestMatchers("/car-hunters/**").hasAnyAuthority(RoleEnum.ADMIN.name())
+                        .anyRequest().authenticated()
+                );
+
+        http.authenticationProvider(authenticationProvider());
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -33,7 +53,7 @@ public class SecurityConfig {
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
-        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setUserDetailsService(getUserDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;
@@ -49,17 +69,11 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated());
+    private AuthEntryPointJwt getUnauthorizedHandler() {
+        return applicationContext.getBean(AuthEntryPointJwt.class);
+    }
 
-        http.authenticationProvider(authenticationProvider());
-
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
+    private UserDetailsService getUserDetailsService() {
+        return applicationContext.getBean(UserDetailsService.class);
     }
 }
