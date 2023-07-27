@@ -17,6 +17,7 @@ public class CarHunterDTO implements Serializable {
     private String email;
     private String logoUrl;
     private String serviceDescription;
+    private Boolean isActive;
     private SocialMediaDTO socialMedia = new SocialMediaDTO();
     private CityDTO city = new CityDTO();
     private List<PhoneDTO> phones = new ArrayList<>();
@@ -30,6 +31,7 @@ public class CarHunterDTO implements Serializable {
         this.email = carHunter.getEmail();
         this.logoUrl = carHunter.getLogoUrl();
         this.serviceDescription = carHunter.getServiceDescription();
+        this.isActive = carHunter.getActive();
 
         // Dados da cidade do Consultor
         this.city.setId(carHunter.getCity().getId());
@@ -139,5 +141,13 @@ public class CarHunterDTO implements Serializable {
 
     public void setServiceRange(ServiceRangeDTO serviceRange) {
         this.serviceRange = serviceRange;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

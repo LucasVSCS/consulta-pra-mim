@@ -9,6 +9,7 @@ public class CarHunterPaginationFilterDTO implements Serializable {
 
     private String name;
     private String tradingName;
+    private Integer status;
     private Long cityId;
 
     public String getName() {
@@ -25,6 +26,14 @@ public class CarHunterPaginationFilterDTO implements Serializable {
 
     public void setTradingName(String tradingName) {
         this.tradingName = tradingName;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Long getCityId() {

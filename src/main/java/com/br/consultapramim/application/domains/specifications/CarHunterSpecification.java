@@ -19,4 +19,8 @@ public class CarHunterSpecification {
         return (root, query, cb) -> cb.equal(root.get("city").get("id"), cityId);
     }
 
+    public static Specification<CarHunter> isActive(Integer isActive) {
+        Boolean value = isActive == 1 ? Boolean.TRUE : isActive == 0 ? Boolean.FALSE : null;
+        return (root, query, cb) -> cb.equal(root.get("isActive"), value);
+    }
 }

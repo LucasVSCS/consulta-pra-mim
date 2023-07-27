@@ -140,6 +140,10 @@ public class CarHunterServiceImpl implements CarHunterService {
             spec = spec.and(CarHunterSpecification.withCity(paginationFilter.getCityId()));
         }
 
+        if (Objects.nonNull(paginationFilter.getStatus())) {
+            spec = spec.and(CarHunterSpecification.isActive(paginationFilter.getStatus()));
+        }
+
         return spec;
     }
 
