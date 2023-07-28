@@ -31,7 +31,7 @@ public class CarHunterDTO implements Serializable {
         this.email = carHunter.getEmail();
         this.logoUrl = carHunter.getLogoUrl();
         this.serviceDescription = carHunter.getServiceDescription();
-        this.isActive = carHunter.getActive();
+        this.isActive = carHunter.getIsActive();
 
         // Dados da cidade do Consultor
         this.city.setId(carHunter.getCity().getId());
@@ -143,11 +143,11 @@ public class CarHunterDTO implements Serializable {
         this.serviceRange = serviceRange;
     }
 
-    public Boolean getActive() {
+    public Boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(Boolean active) {
-        isActive = active;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 }

@@ -23,6 +23,7 @@ public class CarHunterInsertDTO implements Serializable {
     private List<PhoneDTO> phones = new ArrayList<>();
     private SocialMediaDTO socialMedia;
     private ServiceRangeDTO serviceRange;
+    private Boolean isActive;
 
     public String getName() {
         return name;
@@ -86,5 +87,13 @@ public class CarHunterInsertDTO implements Serializable {
 
     public void setServiceRange(ServiceRangeDTO serviceRange) {
         this.serviceRange = serviceRange;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 }

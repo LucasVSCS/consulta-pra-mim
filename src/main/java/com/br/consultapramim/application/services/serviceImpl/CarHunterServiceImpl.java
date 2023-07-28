@@ -72,6 +72,7 @@ public class CarHunterServiceImpl implements CarHunterService {
             carHunter.setTradingName(carHunterInsertDTO.getTradingName());
             carHunter.setEmail(carHunterInsertDTO.getEmail());
             carHunter.setServiceDescription(carHunterInsertDTO.getServiceDescription());
+            carHunter.setIsActive(carHunterInsertDTO.getIsActive());
 
             City city = cityRepository.findById(carHunterInsertDTO.getCityId()).orElseThrow(() -> new ObjectNotFoundException("City not found"));
             carHunter.setCity(city);

@@ -105,12 +105,12 @@ public class CarHunter implements Serializable {
         this.serviceDescription = serviceDescription;
     }
 
-    public Boolean getActive() {
+    public Boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(Boolean active) {
-        isActive = active;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public UUID getExternalId() {
