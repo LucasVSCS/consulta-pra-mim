@@ -37,11 +37,11 @@ public class PhoneDTO implements Serializable {
         this.number = number;
     }
 
-    public boolean isWhatsapp() {
+    public boolean getIsWhatsapp() {
         return isWhatsapp;
     }
 
-    public void setIsWhatsapp(boolean whatsapp) {
-        isWhatsapp = whatsapp;
+    public void setIsWhatsapp(boolean isWhatsapp) {
+        this.isWhatsapp = isWhatsapp;
     }
 }

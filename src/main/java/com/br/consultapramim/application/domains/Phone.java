@@ -30,13 +30,13 @@ public class Phone implements Serializable {
     public Phone(PhoneDTO phone) {
         this.areaCode = phone.getAreaCode();
         this.number = phone.getNumber();
-        this.isWhatsapp = phone.isWhatsapp();
+        this.isWhatsapp = phone.getIsWhatsapp();
     }
 
     public Phone(PhoneDTO phone, CarHunter carHunter) {
         this.areaCode = phone.getAreaCode();
         this.number = phone.getNumber();
-        this.isWhatsapp = phone.isWhatsapp();
+        this.isWhatsapp = phone.getIsWhatsapp();
         this.carHunter = carHunter;
     }
 
