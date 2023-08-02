@@ -24,6 +24,7 @@ public class CarHunterInsertDTO implements Serializable {
     private SocialMediaDTO socialMedia;
     private ServiceRangeDTO serviceRange;
     private Boolean isActive;
+    private String logoImage;
 
     public String getName() {
         return name;
@@ -95,5 +96,13 @@ public class CarHunterInsertDTO implements Serializable {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public String getLogoImage() {
+        return logoImage;
+    }
+
+    public void setLogoImage(String logoImage) {
+        this.logoImage = logoImage;
     }
 }

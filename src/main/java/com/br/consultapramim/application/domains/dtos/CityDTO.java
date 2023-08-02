@@ -1,5 +1,7 @@
 package com.br.consultapramim.application.domains.dtos;
 
+import com.br.consultapramim.application.domains.City;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -14,6 +16,12 @@ public class CityDTO implements Serializable {
         this.id = id;
         this.name = name;
         this.ufCode = ufCode;
+    }
+
+    public CityDTO(City city) {
+        this.id = city.getId();
+        this.name = city.getName();
+        this.ufCode = city.getUfCode();
     }
 
     public CityDTO() {

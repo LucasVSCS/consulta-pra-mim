@@ -57,6 +57,8 @@ public class CarHunterServiceImpl implements CarHunterService {
         City city = cityRepository.findById(carHunterInsertDTO.getCityId()).orElseThrow(() -> new ObjectNotFoundException("City not found"));
         carHunter.setCity(city);
 
+        carHunter.setPhones(carHunterInsertDTO.getPhones().stream().map(phone -> new Phone(phone, carHunter)).toList());
+
         return new CarHunterDTO(carHunterRepository.save(carHunter));
     }
 
