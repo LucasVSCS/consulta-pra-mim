@@ -6,6 +6,8 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class FileUtil {
 
@@ -31,10 +33,12 @@ public class FileUtil {
     }
 
     public static String getBase64FromFile(String path) throws IOException {
-        try{
-            byte[] imageBytes = java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(path));
-            return Base64.encodeBase64String(imageBytes);
-        }catch(IOException e){
+        try {
+            byte[] imageBytes = Files.readAllBytes(Paths.get(path));
+            String mimeType = Files.probeContentType(Paths.get(path));
+            String base64 = Base64.encodeBase64String(imageBytes);
+            return "data:" + mimeType + ";base64," + base64;
+        } catch (IOException e) {
             throw new IOException("Erro ao ler a logo do consultor");
         }
     }

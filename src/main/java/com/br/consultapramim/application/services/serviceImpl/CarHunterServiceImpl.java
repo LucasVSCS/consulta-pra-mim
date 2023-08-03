@@ -96,8 +96,13 @@ public class CarHunterServiceImpl implements CarHunterService {
                             .toList()
             );
 
-            String filePath = carHunterLogoPath + externalId + ".png";
-            FileUtil.saveCarhunterLogo(filePath, carHunterInsertDTO.getLogoImage());
+            String[] parts = carHunterInsertDTO.getLogoImage().split(",");
+            String mimeType = parts[0].substring(5, parts[0].length() - 7);
+            String fileExtension = mimeType.split("/")[1];
+            String base64 = parts[1];
+
+            String filePath = carHunterLogoPath + externalId + "."+ fileExtension;
+            FileUtil.saveCarhunterLogo(filePath, base64);
 
             carHunter.setLogoUrl(filePath);
 

@@ -32,9 +32,13 @@ public class CarHunterDTO implements Serializable {
         this.tradingName = carHunter.getTradingName();
         this.email = carHunter.getEmail();
         this.logoUrl = carHunter.getLogoUrl();
-        try {
-            this.logoUrl = FileUtil.getBase64FromFile(carHunter.getLogoUrl());
-        } catch (IOException e) {
+        if (this.logoUrl != null) {
+            try {
+                this.logoUrl = FileUtil.getBase64FromFile(carHunter.getLogoUrl());
+            } catch (IOException e) {
+                this.logoUrl = null;
+            }
+        } else {
             this.logoUrl = null;
         }
         this.serviceDescription = carHunter.getServiceDescription();
