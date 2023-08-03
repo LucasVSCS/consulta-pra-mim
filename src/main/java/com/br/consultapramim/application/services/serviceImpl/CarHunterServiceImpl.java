@@ -174,6 +174,34 @@ public class CarHunterServiceImpl implements CarHunterService {
             spec = spec.and(CarHunterSpecification.isActive(paginationFilter.getStatus()));
         }
 
+        if (Objects.nonNull(paginationFilter.getSearchRadius())) {
+            spec = spec.and(CarHunterSpecification.withSearchRadius(paginationFilter.getSearchRadius()));
+        }
+
+        if (Objects.nonNull(paginationFilter.getYearMin())) {
+            spec = spec.and(CarHunterSpecification.withYearMin(paginationFilter.getYearMin()));
+        }
+
+        if (Objects.nonNull(paginationFilter.getYearMax())) {
+            spec = spec.and(CarHunterSpecification.withYearMax(paginationFilter.getYearMax()));
+        }
+
+        if (Objects.nonNull(paginationFilter.getPriceMin())) {
+            spec = spec.and(CarHunterSpecification.withPriceMin(paginationFilter.getPriceMin()));
+        }
+
+        if (Objects.nonNull(paginationFilter.getPriceMax())) {
+            spec = spec.and(CarHunterSpecification.withPriceMax(paginationFilter.getPriceMax()));
+        }
+
+        if (Objects.nonNull(paginationFilter.getBrandNew())) {
+            spec = spec.and(CarHunterSpecification.withBrandNew(paginationFilter.getBrandNew()));
+        }
+
+        if (Objects.nonNull(paginationFilter.getServiceDescription())) {
+            spec = spec.and(CarHunterSpecification.withServiceDescription(paginationFilter.getServiceDescription()));
+        }
+
         return spec;
     }
 
