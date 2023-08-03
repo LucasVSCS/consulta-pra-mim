@@ -41,7 +41,7 @@ public class CarHunter implements Serializable {
     private ServiceRange serviceRange;
     @OneToMany(mappedBy = "carHunter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Phone> phones;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "city_id")
     private City city;
 

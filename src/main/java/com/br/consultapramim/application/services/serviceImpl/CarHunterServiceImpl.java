@@ -1,25 +1,31 @@
 package com.br.consultapramim.application.services.serviceImpl;
 
 import com.br.consultapramim.application.domains.*;
-import com.br.consultapramim.application.domains.dtos.*;
+import com.br.consultapramim.application.domains.dtos.CarHunterDTO;
+import com.br.consultapramim.application.domains.dtos.CarHunterInsertDTO;
+import com.br.consultapramim.application.domains.dtos.CarHunterPaginationFilterDTO;
+import com.br.consultapramim.application.domains.dtos.PaginationResultResponseDTO;
 import com.br.consultapramim.application.domains.specifications.CarHunterSpecification;
 import com.br.consultapramim.application.repositories.CarHunterRepository;
 import com.br.consultapramim.application.repositories.CityRepository;
 import com.br.consultapramim.application.services.CarHunterService;
 import com.br.consultapramim.application.services.exceptions.InternalServerErrorException;
 import com.br.consultapramim.application.services.exceptions.ObjectNotFoundException;
+import com.br.consultapramim.application.utils.FileUtil;
 import com.br.consultapramim.application.utils.MessageResponse;
 import com.br.consultapramim.application.utils.MessageUtil;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class CarHunterServiceImpl implements CarHunterService {
@@ -27,6 +33,8 @@ public class CarHunterServiceImpl implements CarHunterService {
     private CarHunterRepository carHunterRepository;
     @Autowired
     private CityRepository cityRepository;
+    @Value("${car-hunter-logo-path}")
+    private String carHunterLogoPath;
 
     @Override
     public PaginationResultResponseDTO<CarHunterDTO> getAllCarHunters(Integer pageNo, Integer pageSize, String sortBy, String sortOrder, CarHunterPaginationFilterDTO paginationFilter) {
@@ -82,10 +90,15 @@ public class CarHunterServiceImpl implements CarHunterService {
             carHunter.getPhones().clear();
             carHunter.getPhones().addAll(carHunterInsertDTO.getPhones().stream().map(phone -> new Phone(phone, carHunter)).toList());
 
-            if (carHunterInsertDTO.getServiceRange() != null){
-                if(carHunter.getServiceRange() == null) {
+            String filePath = carHunterLogoPath + externalId + ".png";
+            FileUtil.saveCarhunterLogo(filePath, carHunterInsertDTO.getLogoImage());
+
+            carHunter.setLogoUrl(filePath);
+
+            if (carHunterInsertDTO.getServiceRange() != null) {
+                if (carHunter.getServiceRange() == null) {
                     carHunter.setServiceRange(new ServiceRange(carHunterInsertDTO.getServiceRange(), carHunter));
-                }else{
+                } else {
                     carHunter.getServiceRange().setSearchRadius(carHunterInsertDTO.getServiceRange().getSearchRadius());
                     carHunter.getServiceRange().setYearMin(carHunterInsertDTO.getServiceRange().getYearMin());
                     carHunter.getServiceRange().setYearMax(carHunterInsertDTO.getServiceRange().getYearMax());
@@ -95,10 +108,10 @@ public class CarHunterServiceImpl implements CarHunterService {
                 }
             }
 
-            if (carHunterInsertDTO.getSocialMedia() != null){
-                if (carHunter.getSocialMedia() == null){
+            if (carHunterInsertDTO.getSocialMedia() != null) {
+                if (carHunter.getSocialMedia() == null) {
                     carHunter.setSocialMedia(new SocialMedia(carHunterInsertDTO.getSocialMedia(), carHunter));
-                }else{
+                } else {
                     carHunter.getSocialMedia().setFacebookUrl(carHunterInsertDTO.getSocialMedia().getFacebookUrl());
                     carHunter.getSocialMedia().setInstagramUrl(carHunterInsertDTO.getSocialMedia().getInstagramUrl());
                 }
@@ -119,6 +132,10 @@ public class CarHunterServiceImpl implements CarHunterService {
             CarHunter carHunter = carHunterRepository.findByExternalId(externalId);
 
             if (Objects.isNull(carHunter)) throw new ObjectNotFoundException("CarHunter not found");
+
+            if(carHunter.getLogoUrl() != null) {
+                FileUtil.deleteCarHunterLogo(carHunter.getLogoUrl());
+            }
 
             carHunterRepository.delete(carHunter);
 
