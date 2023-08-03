@@ -28,14 +28,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(getUnauthorizedHandler()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/signin").permitAll()
+                        .requestMatchers("/cities/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/car-hunters/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/car-hunters").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/cities/**").permitAll()
-                        .requestMatchers("/car-hunters/**").hasAnyAuthority(RoleEnum.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/car-hunters/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/car-hunters/**").hasAnyAuthority(RoleEnum.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE,"/car-hunters/**").hasAnyAuthority(RoleEnum.ADMIN.name())
                         .anyRequest().authenticated()
                 );
 
