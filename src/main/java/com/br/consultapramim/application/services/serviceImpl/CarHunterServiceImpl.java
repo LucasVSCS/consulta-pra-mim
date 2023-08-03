@@ -88,7 +88,13 @@ public class CarHunterServiceImpl implements CarHunterService {
             carHunter.setCity(city);
 
             carHunter.getPhones().clear();
-            carHunter.getPhones().addAll(carHunterInsertDTO.getPhones().stream().map(phone -> new Phone(phone, carHunter)).toList());
+            carHunter.getPhones().addAll(
+                    carHunterInsertDTO.getPhones()
+                            .stream()
+                            .filter(phone -> !phone.getAreaCode().isEmpty() || !phone.getNumber().isEmpty())
+                            .map(phone -> new Phone(phone, carHunter))
+                            .toList()
+            );
 
             String filePath = carHunterLogoPath + externalId + ".png";
             FileUtil.saveCarhunterLogo(filePath, carHunterInsertDTO.getLogoImage());
@@ -101,7 +107,11 @@ public class CarHunterServiceImpl implements CarHunterService {
                 } else {
                     carHunter.getServiceRange().setSearchRadius(carHunterInsertDTO.getServiceRange().getSearchRadius());
                     carHunter.getServiceRange().setYearMin(carHunterInsertDTO.getServiceRange().getYearMin());
-                    carHunter.getServiceRange().setYearMax(carHunterInsertDTO.getServiceRange().getYearMax());
+                    if ((carHunterInsertDTO.getServiceRange().getBrandNew())) {
+                        carHunter.getServiceRange().setYearMax(null);
+                    } else {
+                        carHunter.getServiceRange().setYearMax(carHunterInsertDTO.getServiceRange().getYearMax());
+                    }
                     carHunter.getServiceRange().setPriceMin(carHunterInsertDTO.getServiceRange().getPriceMin());
                     carHunter.getServiceRange().setPriceMax(carHunterInsertDTO.getServiceRange().getPriceMax());
                     carHunter.getServiceRange().setBrandNew(carHunterInsertDTO.getServiceRange().getBrandNew());
