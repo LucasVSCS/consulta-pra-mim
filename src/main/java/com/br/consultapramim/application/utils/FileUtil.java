@@ -28,6 +28,14 @@ public class FileUtil {
         if (file.exists()) {
             file.delete();
         }
+    }
 
+    public static String getBase64FromFile(String path) throws IOException {
+        try{
+            byte[] imageBytes = java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(path));
+            return Base64.encodeBase64String(imageBytes);
+        }catch(IOException e){
+            throw new IOException("Erro ao ler a logo do consultor");
+        }
     }
 }

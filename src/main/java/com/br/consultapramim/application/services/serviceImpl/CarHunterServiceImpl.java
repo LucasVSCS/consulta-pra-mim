@@ -204,5 +204,4 @@ public class CarHunterServiceImpl implements CarHunterService {
 
         return spec;
     }
-
 }

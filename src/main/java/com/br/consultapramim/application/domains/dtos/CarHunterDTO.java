@@ -1,7 +1,9 @@
 package com.br.consultapramim.application.domains.dtos;
 
 import com.br.consultapramim.application.domains.CarHunter;
+import com.br.consultapramim.application.utils.FileUtil;
 
+import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,6 +32,11 @@ public class CarHunterDTO implements Serializable {
         this.tradingName = carHunter.getTradingName();
         this.email = carHunter.getEmail();
         this.logoUrl = carHunter.getLogoUrl();
+        try {
+            this.logoUrl = FileUtil.getBase64FromFile(carHunter.getLogoUrl());
+        } catch (IOException e) {
+            this.logoUrl = null;
+        }
         this.serviceDescription = carHunter.getServiceDescription();
         this.isActive = carHunter.getIsActive();
 
@@ -39,7 +46,7 @@ public class CarHunterDTO implements Serializable {
         this.city.setUfCode(carHunter.getCity().getUfCode());
 
         // Dados dos telefones do Consultor
-        if (carHunter.getPhones() != null){
+        if (carHunter.getPhones() != null) {
             carHunter.getPhones().forEach(phone -> {
                 PhoneDTO phoneDTO = new PhoneDTO(phone);
                 this.phones.add(phoneDTO);
